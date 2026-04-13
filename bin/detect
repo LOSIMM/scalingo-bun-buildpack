@@ -1,10 +1,10 @@
 #!/bin/sh
 
 # Check for the presence of the bun.lockb file
-if [ -f "$1/bun.lockb" ]; then
+if [ -f "$1/bun.lock" ]; then
   echo "Bun app detected"
   exit 0
 else
-  echo "No bun.lockb file found. Not a Bun app."
+  echo "No bun.lock file found. Not a Bun app."
   exit 1
 fi
