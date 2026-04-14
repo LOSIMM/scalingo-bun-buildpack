@@ -54,10 +54,8 @@ cd $BUILD_DIR
 
 # Inject NPM_TOKEN for private registry authentication
 if [ -n "$NPM_TOKEN" ]; then
-    echo "-----> Configuring GitHub Packages auth in .npmrc"
-    printf '@immersionrnd:registry=https://npm.pkg.github.com/\n//npm.pkg.github.com/:_authToken=%s\n' "$NPM_TOKEN" > $BUILD_DIR/.npmrc
-    echo "-----> .npmrc content:"
-    cat $BUILD_DIR/.npmrc
+    echo "-----> Injecting NPM_TOKEN into .npmrc"
+    sed -i "s/\${NPM_TOKEN}/$NPM_TOKEN/g" $BUILD_DIR/.npmrc
     echo "-----> Testing registry access:"
     curl -s -o /dev/null -w "HTTP status: %{http_code}\n" \
         -H "Authorization: Bearer $NPM_TOKEN" \
