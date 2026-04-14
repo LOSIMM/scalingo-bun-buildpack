@@ -56,6 +56,14 @@ cd $BUILD_DIR
 if [ -n "$NPM_TOKEN" ]; then
     echo "-----> Injecting NPM_TOKEN into bunfig.toml"
     printf '\n[install.scopes]\n"@immersionrnd" = { registry = "https://npm.pkg.github.com/", token = "%s" }\n' "$NPM_TOKEN" >> $BUILD_DIR/bunfig.toml
+    echo "-----> bunfig.toml content after injection:"
+    cat $BUILD_DIR/bunfig.toml
+    echo "-----> Testing registry access:"
+    curl -s -o /dev/null -w "HTTP status: %{http_code}\n" \
+        -H "Authorization: Bearer $NPM_TOKEN" \
+        "https://npm.pkg.github.com/@immersionrnd/nextgenshared"
+else
+    echo "-----> WARNING: NPM_TOKEN is not set!"
 fi
 
 $BUN_DIR/bun-linux-x64/bun install --cache || {
